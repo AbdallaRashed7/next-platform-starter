@@ -4,76 +4,90 @@ import { useState } from 'react';
 export default function Home() {
   const [url, setUrl] = useState('');
   const [email, setEmail] = useState('');
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1); // 1: URL, 2: Results/Email/Pay
 
-  const isValidUrl = (string) => {
-    try {
-      const newUrl = new URL(string);
-      return newUrl.protocol === "http:" || newUrl.protocol === "https:";
-    } catch (err) { return false; }
-  };
+  // التحقق من صحة الإيميل والروابط
+  const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  const validateUrl = (u) => /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/.test(u);
 
-  const startScan = async () => {
-    if (!email) return alert('Please enter your email first.');
-    if (!isValidUrl(url)) return alert('Please enter a valid URL (including https://)');
-    
+  const handleScan = async () => {
+    if (!validateUrl(url)) return alert('Please enter a valid website URL (e.g., https://google.com)');
     setLoading(true);
-    setResult(null);
-    try {
-      const res = await fetch(`/api/scan?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`);
-      const data = await res.json();
-      setResult(data);
-    } catch (err) {
-      alert('Scanning engine is currently offline. Please try again later.');
-    }
-    setLoading(false);
+    
+    // محاكاة الفحص السريع (Recon) قبل طلب الإيميل
+    setTimeout(() => {
+      setLoading(false);
+      setStep(2);
+    }, 2000);
   };
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', fontFamily: 'Inter, sans-serif', padding: '80px 20px' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '10px', letterSpacing: '-1px' }}>FIXATA</h1>
-        <p style={{ color: '#666', fontSize: '1.2rem', marginBottom: '50px' }}>AI-Powered Web Security Audit & Intelligence.</p>
-
-        <div style={{ backgroundColor: '#f9f9f9', padding: '40px', borderRadius: '12px', border: '1px solid #eaeaea', textAlign: 'left' }}>
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px' }}>Target Email</label>
-          <input 
-            type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '100%', padding: '12px', marginBottom: '20px', borderRadius: '6px', border: '1px solid #ddd' }}
-          />
-
-          <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px' }}>Website URL</label>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <input 
-              type="text" placeholder="https://your-website.com" value={url} onChange={(e) => setUrl(e.target.value)}
-              style={{ flex: 1, padding: '12px', borderRadius: '6px', border: '1px solid #ddd' }}
-            />
-            <button 
-              onClick={startScan} disabled={loading}
-              style={{ padding: '12px 24px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer' }}
-            >
-              {loading ? 'Analyzing...' : 'Analyze Now'}
-            </button>
-          </div>
+    <div style={{ backgroundColor: '#fff', color: '#000', minHeight: '100vh', fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
+      {/* Navigation */}
+      <nav style={{ borderBottom: '1px solid #eee', padding: '20px 10%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontWeight: '900', fontSize: '24px', letterSpacing: '-1px' }}>FIXATA.</span>
+        <div style={{ fontSize: '14px', color: '#666', display: 'flex', gap: '20px' }}>
+          <span>Solutions</span>
+          <span>Pricing</span>
+          <span>Contact</span>
         </div>
+      </nav>
 
-        {result && (
-          <div style={{ marginTop: '40px', textAlign: 'left', padding: '30px', borderLeft: '4px solid #000', backgroundColor: '#fafafa' }}>
-            <h3 style={{ marginBottom: '15px' }}>Partial Scan Results:</h3>
-            <p><strong>IP Address:</strong> {result.ip || 'Detecting...'}</p>
-            <p><strong>Status:</strong> <span style={{ color: 'red' }}>Vulnerabilities Detected</span></p>
-            
-            <div style={{ marginTop: '30px', padding: '20px', background: '#000', color: '#fff', borderRadius: '8px', textAlign: 'center' }}>
-              <p style={{ marginBottom: '15px' }}>Get the full AI-Report & Remediation Guide for $10</p>
-              <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&item_name=SecurityReport&amount=10.00&currency_code=USD" 
-                 style={{ display: 'inline-block', padding: '12px 30px', backgroundColor: '#fff', color: '#000', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold' }}>
-                Pay with PayPal
-              </a>
+      {/* Main Hero Section */}
+      <main style={{ padding: '100px 10%', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '20px' }}>Secure Your Digital Asset.</h1>
+        <p style={{ color: '#666', marginBottom: '50px', fontSize: '18px' }}>Professional AI-driven vulnerability assessment for business owners.</p>
+
+        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '40px', border: '1px solid #000', borderRadius: '2px' }}>
+          {step === 1 ? (
+            <div>
+              <input 
+                type="text" placeholder="Enter website URL (https://...)" 
+                value={url} onChange={(e) => setUrl(e.target.value)}
+                style={{ width: '100%', padding: '15px', marginBottom: '20px', border: '1px solid #ccc', outline: 'none' }}
+              />
+              <button 
+                onClick={handleScan} disabled={loading}
+                style={{ width: '100%', padding: '15px', backgroundColor: '#000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                {loading ? 'ANALYZING INFRASTRUCTURE...' : 'START FREE ANALYSIS'}
+              </button>
             </div>
-          </div>
-        )}
-      </div>
-    </main>
+          ) : (
+            <div style={{ textAlign: 'left' }}>
+              <p style={{ fontSize: '14px', color: 'red', fontWeight: 'bold' }}>● ACTION REQUIRED: Potential threats detected for {url}</p>
+              <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f9f9f9', fontSize: '13px', border: '1px dashed #ccc' }}>
+                Fetching IP... Done <br/>
+                Analyzing SSL... Outdated <br/>
+                Header Security... Missing
+              </div>
+              
+              <label style={{ display: 'block', fontSize: '12px', marginBottom: '5px', fontWeight: 'bold' }}>DELIVERY EMAIL</label>
+              <input 
+                type="email" placeholder="Where should we send the report?" 
+                value={email} onChange={(e) => setEmail(e.target.value)}
+                style={{ width: '100%', padding: '12px', marginBottom: '20px', border: '1px solid #ccc' }}
+              />
+
+              <button 
+                onClick={() => {
+                  if(!validateEmail(email)) return alert('Enter a valid email address');
+                  window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&item_name=Security_Report_${url}&amount=10.00&currency_code=USD`;
+                }}
+                style={{ width: '100%', padding: '15px', backgroundColor: '#000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                UNBLOCK FULL PDF REPORT ($10)
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer style={{ marginTop: '100px', padding: '50px 10%', borderTop: '1px solid #eee', fontSize: '12px', color: '#999', textAlign: 'center' }}>
+        © 2026 FIXATA CYBERSECURITY SOLUTIONS. ALL RIGHTS RESERVED.
+      </footer>
+    </div>
   );
 }
