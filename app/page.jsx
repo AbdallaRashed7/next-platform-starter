@@ -5,89 +5,79 @@ export default function Home() {
   const [url, setUrl] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: URL, 2: Results/Email/Pay
-
-  // التحقق من صحة الإيميل والروابط
-  const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  const validateUrl = (u) => /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/.test(u);
+  const [result, setResult] = useState(null);
 
   const handleScan = async () => {
-    if (!validateUrl(url)) return alert('Please enter a valid website URL (e.g., https://google.com)');
+    if (!url.includes('http')) return alert('Please enter a valid URL (https://...)');
     setLoading(true);
-    
-    // محاكاة الفحص السريع (Recon) قبل طلب الإيميل
-    setTimeout(() => {
-      setLoading(false);
-      setStep(2);
-    }, 2000);
+    try {
+      // نطلب البيانات من الـ API الذي سيتصل بسيرفر AWS
+      const res = await fetch(`/api/scan?url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      setResult(data);
+    } catch (err) {
+      alert('Engine error. Please check your AWS server.');
+    }
+    setLoading(false);
   };
 
   return (
-    <div style={{ backgroundColor: '#fff', color: '#000', minHeight: '100vh', fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-      {/* Navigation */}
-      <nav style={{ borderBottom: '1px solid #eee', padding: '20px 10%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontWeight: '900', fontSize: '24px', letterSpacing: '-1px' }}>FIXATA.</span>
-        <div style={{ fontSize: '14px', color: '#666', display: 'flex', gap: '20px' }}>
-          <span>Solutions</span>
-          <span>Pricing</span>
-          <span>Contact</span>
+    <div style={{ backgroundColor: '#fff', color: '#000', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      {/* Header مع روابط تعمل */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '20px 8%', borderBottom: '1px solid #f0f0f0', position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 100 }}>
+        <div style={{ fontWeight: '900', fontSize: '22px' }}>FIXATA.</div>
+        <div style={{ display: 'flex', gap: '30px', fontSize: '14px', fontWeight: '500' }}>
+          <a href="#how" style={{ textDecoration: 'none', color: '#666' }}>How it works</a>
+          <a href="#pricing" style={{ textDecoration: 'none', color: '#666' }}>Pricing</a>
+          <a href="mailto:support@fixata.shop" style={{ textDecoration: 'none', color: '#000', fontWeight: 'bold' }}>Contact Support</a>
         </div>
       </nav>
 
-      {/* Main Hero Section */}
-      <main style={{ padding: '100px 10%', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '20px' }}>Secure Your Digital Asset.</h1>
-        <p style={{ color: '#666', marginBottom: '50px', fontSize: '18px' }}>Professional AI-driven vulnerability assessment for business owners.</p>
+      <main style={{ padding: '80px 8%', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '64px', fontWeight: '900', letterSpacing: '-2px', marginBottom: '20px' }}>Global Web Intelligence.</h1>
+        <p style={{ color: '#666', fontSize: '20px', marginBottom: '60px' }}>Identify vulnerabilities before they become liabilities.</p>
 
-        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '40px', border: '1px solid #000', borderRadius: '2px' }}>
-          {step === 1 ? (
-            <div>
-              <input 
-                type="text" placeholder="Enter website URL (https://...)" 
-                value={url} onChange={(e) => setUrl(e.target.value)}
-                style={{ width: '100%', padding: '15px', marginBottom: '20px', border: '1px solid #ccc', outline: 'none' }}
-              />
-              <button 
-                onClick={handleScan} disabled={loading}
-                style={{ width: '100%', padding: '15px', backgroundColor: '#000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
-              >
-                {loading ? 'ANALYZING INFRASTRUCTURE...' : 'START FREE ANALYSIS'}
-              </button>
-            </div>
-          ) : (
-            <div style={{ textAlign: 'left' }}>
-              <p style={{ fontSize: '14px', color: 'red', fontWeight: 'bold' }}>● ACTION REQUIRED: Potential threats detected for {url}</p>
-              <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f9f9f9', fontSize: '13px', border: '1px dashed #ccc' }}>
-                Fetching IP... Done <br/>
-                Analyzing SSL... Outdated <br/>
-                Header Security... Missing
-              </div>
-              
-              <label style={{ display: 'block', fontSize: '12px', marginBottom: '5px', fontWeight: 'bold' }}>DELIVERY EMAIL</label>
-              <input 
-                type="email" placeholder="Where should we send the report?" 
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                style={{ width: '100%', padding: '12px', marginBottom: '20px', border: '1px solid #ccc' }}
-              />
-
-              <button 
-                onClick={() => {
-                  if(!validateEmail(email)) return alert('Enter a valid email address');
-                  window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&item_name=Security_Report_${url}&amount=10.00&currency_code=USD`;
-                }}
-                style={{ width: '100%', padding: '15px', backgroundColor: '#000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
-              >
-                UNBLOCK FULL PDF REPORT ($10)
-              </button>
-            </div>
-          )}
+        {/* حقل الفحص الاحترافي */}
+        <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', border: '2px solid #000', padding: '5px', borderRadius: '4px' }}>
+          <input 
+            type="text" placeholder="https://target-website.com" 
+            value={url} onChange={(e) => setUrl(e.target.value)}
+            style={{ flex: 1, border: 'none', padding: '15px', outline: 'none', fontSize: '16px' }}
+          />
+          <button onClick={handleScan} style={{ backgroundColor: '#000', color: '#fff', border: 'none', padding: '0 30px', fontWeight: 'bold', cursor: 'pointer' }}>
+            {loading ? 'ANALYZING...' : 'SCAN NOW'}
+          </button>
         </div>
-      </main>
 
-      {/* Footer */}
-      <footer style={{ marginTop: '100px', padding: '50px 10%', borderTop: '1px solid #eee', fontSize: '12px', color: '#999', textAlign: 'center' }}>
-        © 2026 FIXATA CYBERSECURITY SOLUTIONS. ALL RIGHTS RESERVED.
-      </footer>
+        {/* قسم النتائج والـ PayPal */}
+        {result && (
+          <div id="results" style={{ marginTop: '60px', textAlign: 'left', border: '1px solid #eee', padding: '40px' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '20px' }}>Initial Recon for: {url}</h2>
+            <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '13px' }}>
+              <p>Target IP: {result.ip}</p>
+              <p>Scan Status: 100% Complete</p>
+              <p style={{ color: 'red' }}>Risk Level: High - Full Report Required</p>
+            </div>
+            
+            <div id="pricing" style={{ marginTop: '40px', padding: '40px', backgroundColor: '#000', color: '#fff', textAlign: 'center' }}>
+              <h3>Unlock Full AI Security Report (PDF)</h3>
+              <p style={{ opacity: 0.8 }}>Deep vulnerability analysis, SSL audit, and remediation steps.</p>
+              <input 
+                type="email" placeholder="Your Email Address" 
+                value={email} onChange={(e) => setEmail(e.target.value)}
+                style={{ padding: '12px', width: '250px', margin: '20px 0', borderRadius: '4px', border: 'none' }}
+              />
+              <br/>
+              <button 
+                onClick={() => window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&amount=10.00&item_name=Security_Report_for_${url}`}
+                style={{ padding: '15px 40px', backgroundColor: '#fff', color: '#000', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                PAY $10 VIA PAYPAL
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
