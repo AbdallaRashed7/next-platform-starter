@@ -1,12 +1,8 @@
 import '../styles/globals.css';
-import { Footer } from '../components/footer';
-import { Header } from '../components/header';
 
 export const metadata = {
-    title: {
-        template: '%s | Netlify',
-        default: 'Netlify Starter'
-    }
+    title: 'FIXATA | Web Security Intelligence',
+    description: 'Professional AI-driven vulnerability assessment'
 };
 
 export default function RootLayout({ children }) {
@@ -14,13 +10,26 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <head>
                 <link rel="icon" href="/favicon.svg" sizes="any" />
+                {/* كود تتبع الزيارات - Analytics */}
+                <script 
+                    async 
+                    src="https://www.googletagmanager.com/gtag/js?id=G-83KVGCWSJT">
+                </script>
+                <script dangerouslySetInnerHTML={{
+                    __html: `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', 'G-XXXXXXXXXX');
+                    `
+                }} />
             </head>
-            <body className="antialiased text-white bg-blue-900">
-                <div className="flex flex-col min-h-screen px-6 bg-noise sm:px-12">
-                    <div className="flex flex-col w-full max-w-5xl mx-auto grow">
-                        <Header />
-                        <main className="grow">{children}</main>
-                        <Footer />
+            {/* حذفنا الـ bg-blue-900 والـ text-white ووضعنا خلفية بيضاء */}
+            <body className="antialiased" style={{ backgroundColor: '#ffffff', color: '#000000', margin: 0 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                    {/* سنضع المحتوى مباشرة دون الحاجة لمكونات قديمة تسبب مشاكل */}
+                    <div style={{ flexGrow: 1 }}>
+                        {children}
                     </div>
                 </div>
             </body>
