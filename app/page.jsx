@@ -27,7 +27,7 @@ export default function Home() {
   const handlePayPal = (plan, amount) => {
     if (!email) return alert('Please enter your email address first.');
     const itemName = 'FIXATA_' + plan + '_Report_' + url;
-    window.location.href = 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@fixata.shop&amount=' + amount + '&item_name=' + encodeURIComponent(itemName) + '&custom=' + encodeURIComponent(email);
+    window.location.href = 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=abdallarashed7@gmail.com&amount=' + amount + '&item_name=' + encodeURIComponent(itemName) + '&custom=' + encodeURIComponent(email);
   };
 
   return (
