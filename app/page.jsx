@@ -5,9 +5,7 @@ export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
   const [email, setEmail] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleScan = async () => {
     if (!url.startsWith('http')) return alert('Please enter a valid URL starting with https://');
@@ -26,16 +24,16 @@ export default function Home() {
     setLoading(false);
   };
 
-  const handlePayPal = (plan: string, amount: string) => {
+  const handlePayPal = (plan, amount) => {
     if (!email) return alert('Please enter your email address first.');
-    const itemName = `FIXATA_${plan}_Report_${url}`;
-    window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@fixata.shop&amount=${amount}&item_name=${encodeURIComponent(itemName)}&custom=${encodeURIComponent(email)}`;
+    const itemName = 'FIXATA_' + plan + '_Report_' + url;
+    window.location.href = 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@fixata.shop&amount=' + amount + '&item_name=' + encodeURIComponent(itemName) + '&custom=' + encodeURIComponent(email);
   };
 
   return (
     <div style={{ backgroundColor: '#fff', color: '#111', fontFamily: "'Inter', -apple-system, sans-serif", margin: 0 }}>
 
-      {/* ── NAV ── */}
+      {/* NAV */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 6%', height: '64px', borderBottom: '1px solid #e8e8e8', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(8px)', zIndex: 100 }}>
         <div style={{ fontWeight: '900', fontSize: '20px', letterSpacing: '-0.5px' }}>FIXATA.</div>
         <div style={{ display: 'flex', gap: '32px', fontSize: '13px', fontWeight: '500' }}>
@@ -47,7 +45,7 @@ export default function Home() {
         <a href="#pricing" style={{ backgroundColor: '#111', color: '#fff', padding: '9px 20px', borderRadius: '6px', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Get Started</a>
       </nav>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section style={{ padding: '100px 6% 80px', textAlign: 'center', background: 'linear-gradient(180deg, #fafaf9 0%, #ffffff 100%)', borderBottom: '1px solid #f0f0f0' }}>
         <div style={{ display: 'inline-block', backgroundColor: '#f0f0f0', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', letterSpacing: '1px', marginBottom: '24px', color: '#555' }}>
           PROFESSIONAL WEB SECURITY SCANNING
@@ -78,7 +76,7 @@ export default function Home() {
         </div>
         <p style={{ fontSize: '12px', color: '#999' }}>Free initial scan — No credit card required</p>
 
-        {/* Scan Result Preview */}
+        {/* Scan Result */}
         {result && (
           <div style={{ maxWidth: '640px', margin: '32px auto 0', backgroundColor: '#f9f9f9', border: '1px solid #e8e8e8', borderRadius: '8px', padding: '20px 24px', textAlign: 'left' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
@@ -108,35 +106,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
+      {/* HOW IT WORKS */}
       <section id="how" style={{ padding: '100px 6%', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '64px' }}>
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '12px' }}>HOW IT WORKS</div>
           <h2 style={{ fontSize: '36px', fontWeight: '900', letterSpacing: '-1px' }}>Simple. Fast. Thorough.</h2>
         </div>
-
         {[
-          {
-            step: '01',
-            title: 'Enter Your Website URL',
-            desc: 'Simply paste your website address into our scanner. We support any publicly accessible website — no installation or technical knowledge required.',
-            detail: 'Our scanner validates your URL and prepares a customized scanning profile based on the technologies detected on your site.',
-            side: 'left'
-          },
-          {
-            step: '02',
-            title: 'Choose Your Scan Depth',
-            desc: 'Select from three professional scanning packages based on your security needs and budget. From basic SSL checks to full penetration testing.',
-            detail: 'Each package uses industry-standard tools including Nmap, Nikto, and SSLScan — the same tools used by professional security teams worldwide.',
-            side: 'right'
-          },
-          {
-            step: '03',
-            title: 'Receive Your Security Report',
-            desc: 'Get a detailed, actionable security report delivered directly to your email. Every vulnerability includes a risk rating and step-by-step fix instructions.',
-            detail: 'Reports are generated in PDF format with executive summary, technical details, and remediation roadmap — ready to share with your developer.',
-            side: 'left'
-          }
+          { step: '01', icon: '🔍', title: 'Enter Your Website URL', desc: 'Simply paste your website address into our scanner. We support any publicly accessible website — no installation or technical knowledge required.', detail: 'Our scanner validates your URL and prepares a customized scanning profile based on the technologies detected on your site.', side: 'left' },
+          { step: '02', icon: '⚡', title: 'Choose Your Scan Depth', desc: 'Select from three professional scanning packages based on your security needs and budget. From basic SSL checks to full penetration testing.', detail: 'Each package uses industry-standard tools including Nmap, Nikto, and SSLScan — the same tools used by professional security teams worldwide.', side: 'right' },
+          { step: '03', icon: '📄', title: 'Receive Your Security Report', desc: 'Get a detailed, actionable security report delivered directly to your email. Every vulnerability includes a risk rating and step-by-step fix instructions.', detail: 'Reports are generated in PDF format with executive summary, technical details, and remediation roadmap — ready to share with your developer.', side: 'left' }
         ].map((item) => (
           <div key={item.step} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '80px', direction: item.side === 'right' ? 'rtl' : 'ltr' }}>
             <div style={{ direction: 'ltr' }}>
@@ -144,15 +123,11 @@ export default function Home() {
               <h3 style={{ fontSize: '28px', fontWeight: '800', letterSpacing: '-0.5px', marginBottom: '16px' }}>{item.title}</h3>
               <p style={{ color: '#555', lineHeight: 1.7, marginBottom: '16px' }}>{item.desc}</p>
               <p style={{ color: '#888', fontSize: '14px', lineHeight: 1.7 }}>{item.detail}</p>
-              <a href="#pricing" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '24px', fontWeight: '700', fontSize: '14px', color: '#111', textDecoration: 'none' }}>
-                View Packages →
-              </a>
+              <a href="#pricing" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '24px', fontWeight: '700', fontSize: '14px', color: '#111', textDecoration: 'none' }}>View Packages →</a>
             </div>
             <div style={{ direction: 'ltr', backgroundColor: '#f9f8f6', borderRadius: '12px', padding: '40px', border: '1px solid #e8e8e8', minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '64px', marginBottom: '16px' }}>
-                  {item.step === '01' ? '🔍' : item.step === '02' ? '⚡' : '📄'}
-                </div>
+                <div style={{ fontSize: '64px', marginBottom: '16px' }}>{item.icon}</div>
                 <div style={{ fontWeight: '700', fontSize: '15px' }}>{item.title}</div>
               </div>
             </div>
@@ -160,16 +135,16 @@ export default function Home() {
         ))}
       </section>
 
-      {/* ── PRICING ── */}
+      {/* PRICING */}
       <section id="pricing" style={{ padding: '100px 6%', backgroundColor: '#fafaf9', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0' }}>
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '12px' }}>PRICING</div>
           <h2 style={{ fontSize: '36px', fontWeight: '900', letterSpacing: '-1px', marginBottom: '12px' }}>Choose Your Security Level</h2>
           <p style={{ color: '#666', fontSize: '16px' }}>One-time payment. No subscription. Report delivered to your email.</p>
         </div>
 
         {result && (
-          <div style={{ maxWidth: '500px', margin: '0 auto 40px', textAlign: 'center' }}>
+          <div style={{ maxWidth: '400px', margin: '0 auto 40px', textAlign: 'center' }}>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '8px', color: '#444' }}>Enter your email to receive the report:</label>
             <input
               type="email"
@@ -184,109 +159,65 @@ export default function Home() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', maxWidth: '1000px', margin: '0 auto' }}>
 
           {/* Basic */}
-          <div style={{ backgroundColor: '#fff', border: '1px solid #e8e8e8', borderRadius: '12px', padding: '36px 28px', position: 'relative' }}>
+          <div style={{ backgroundColor: '#fff', border: '1px solid #e8e8e8', borderRadius: '12px', padding: '36px 28px' }}>
             <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '16px' }}>BASIC SHIELD</div>
             <div style={{ fontSize: '48px', fontWeight: '900', letterSpacing: '-2px', marginBottom: '4px' }}>$10</div>
             <div style={{ fontSize: '13px', color: '#888', marginBottom: '28px' }}>one-time payment</div>
             <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '24px', marginBottom: '28px' }}>
-              {[
-                'DNS & IP Resolution',
-                'SSL Certificate Audit',
-                'HTTP Security Headers',
-                'Technology Detection',
-                'Top 100 Open Ports',
-                'Basic Risk Score',
-                'HTML Report via Email',
-                '⏱ ~30 seconds'
-              ].map(item => (
+              {['DNS & IP Resolution', 'SSL Certificate Audit', 'HTTP Security Headers', 'Technology Detection', 'Top 100 Open Ports', 'Basic Risk Score', 'HTML Report via Email', '⏱ ~30 seconds'].map(item => (
                 <div key={item} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '10px', fontSize: '13px', color: item.startsWith('⏱') ? '#888' : '#333' }}>
                   {!item.startsWith('⏱') && <span style={{ color: '#16a34a', fontWeight: '700' }}>✓</span>}
                   <span>{item}</span>
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => result ? handlePayPal('Basic', '10.00') : document.getElementById('hero-input')?.focus()}
-              style={{ width: '100%', padding: '13px', border: '2px solid #111', borderRadius: '6px', backgroundColor: 'transparent', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}
-            >
+            <button onClick={() => result ? handlePayPal('Basic', '10.00') : alert('Please scan your website first.')} style={{ width: '100%', padding: '13px', border: '2px solid #111', borderRadius: '6px', backgroundColor: 'transparent', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
               {result ? 'Get Basic Report →' : 'Scan First →'}
             </button>
           </div>
 
-          {/* Pro - Featured */}
-          <div style={{ backgroundColor: '#111', border: '2px solid #111', borderRadius: '12px', padding: '36px 28px', position: 'relative', color: '#fff' }}>
-            <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#f59e0b', color: '#000', fontSize: '11px', fontWeight: '800', padding: '4px 16px', borderRadius: '12px', letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>
-              MOST POPULAR
-            </div>
+          {/* Pro */}
+          <div style={{ backgroundColor: '#111', border: '2px solid #111', borderRadius: '12px', padding: '36px 28px', color: '#fff', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#f59e0b', color: '#000', fontSize: '11px', fontWeight: '800', padding: '4px 16px', borderRadius: '12px', whiteSpace: 'nowrap' }}>MOST POPULAR</div>
             <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '16px' }}>PRO SCAN</div>
             <div style={{ fontSize: '48px', fontWeight: '900', letterSpacing: '-2px', marginBottom: '4px' }}>$30</div>
             <div style={{ fontSize: '13px', color: '#888', marginBottom: '28px' }}>one-time payment</div>
             <div style={{ borderTop: '1px solid #333', paddingTop: '24px', marginBottom: '28px' }}>
-              {[
-                'Everything in Basic',
-                'Full Port Scan (top 1000)',
-                'Nikto Vulnerability Scan',
-                'Outdated Software Detection',
-                'Misconfiguration Analysis',
-                'Detailed Risk Score (0-10)',
-                'Open CVE References',
-                'PDF Report via Email',
-                '⏱ ~2-3 minutes'
-              ].map(item => (
+              {['Everything in Basic', 'Full Port Scan (top 1000)', 'Nikto Vulnerability Scan', 'Outdated Software Detection', 'Misconfiguration Analysis', 'Risk Score (0-10)', 'Open CVE References', 'PDF Report via Email', '⏱ ~2-3 minutes'].map(item => (
                 <div key={item} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '10px', fontSize: '13px', color: item.startsWith('⏱') ? '#888' : '#ccc' }}>
                   {!item.startsWith('⏱') && <span style={{ color: '#f59e0b', fontWeight: '700' }}>✓</span>}
                   <span>{item}</span>
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => result ? handlePayPal('Pro', '30.00') : document.getElementById('hero-input')?.focus()}
-              style={{ width: '100%', padding: '13px', border: 'none', borderRadius: '6px', backgroundColor: '#f59e0b', color: '#000', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}
-            >
+            <button onClick={() => result ? handlePayPal('Pro', '30.00') : alert('Please scan your website first.')} style={{ width: '100%', padding: '13px', border: 'none', borderRadius: '6px', backgroundColor: '#f59e0b', color: '#000', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
               {result ? 'Get Pro Report →' : 'Scan First →'}
             </button>
           </div>
 
           {/* Deep */}
-          <div style={{ backgroundColor: '#fff', border: '1px solid #e8e8e8', borderRadius: '12px', padding: '36px 28px', position: 'relative' }}>
+          <div style={{ backgroundColor: '#fff', border: '1px solid #e8e8e8', borderRadius: '12px', padding: '36px 28px' }}>
             <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '16px' }}>DEEP RECON</div>
             <div style={{ fontSize: '48px', fontWeight: '900', letterSpacing: '-2px', marginBottom: '4px' }}>$50</div>
             <div style={{ fontSize: '13px', color: '#888', marginBottom: '28px' }}>one-time payment</div>
             <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '24px', marginBottom: '28px' }}>
-              {[
-                'Everything in Pro',
-                'All Ports Scan (1-65535)',
-                'Deep Nikto Full Audit',
-                'SQL Injection Indicators',
-                'XSS Vulnerability Check',
-                'Subdomain Enumeration',
-                'Admin Panel Detection',
-                'Step-by-Step Fix Guide',
-                'Full PDF Report + Summary',
-                '⏱ ~5-10 minutes'
-              ].map(item => (
+              {['Everything in Pro', 'All Ports Scan (1-65535)', 'Deep Nikto Full Audit', 'SQL Injection Indicators', 'XSS Vulnerability Check', 'Subdomain Enumeration', 'Admin Panel Detection', 'Step-by-Step Fix Guide', 'Full PDF Report + Summary', '⏱ ~5-10 minutes'].map(item => (
                 <div key={item} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '10px', fontSize: '13px', color: item.startsWith('⏱') ? '#888' : '#333' }}>
                   {!item.startsWith('⏱') && <span style={{ color: '#16a34a', fontWeight: '700' }}>✓</span>}
                   <span>{item}</span>
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => result ? handlePayPal('DeepRecon', '50.00') : document.getElementById('hero-input')?.focus()}
-              style={{ width: '100%', padding: '13px', border: '2px solid #111', borderRadius: '6px', backgroundColor: 'transparent', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}
-            >
+            <button onClick={() => result ? handlePayPal('DeepRecon', '50.00') : alert('Please scan your website first.')} style={{ width: '100%', padding: '13px', border: '2px solid #111', borderRadius: '6px', backgroundColor: 'transparent', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
               {result ? 'Get Full Report →' : 'Scan First →'}
             </button>
           </div>
 
         </div>
-
-        <p style={{ textAlign: 'center', marginTop: '32px', fontSize: '13px', color: '#888' }}>
-          🔒 Payments secured by PayPal. Report delivered within minutes to your email.
-        </p>
+        <p style={{ textAlign: 'center', marginTop: '32px', fontSize: '13px', color: '#888' }}>🔒 Payments secured by PayPal. Report delivered within minutes to your email.</p>
       </section>
 
-      {/* ── WHY FIXATA ── */}
+      {/* WHY FIXATA */}
       <section style={{ padding: '100px 6%', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '64px' }}>
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '12px' }}>WHY FIXATA</div>
@@ -310,7 +241,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
+      {/* ABOUT */}
       <section id="about" style={{ padding: '100px 6%', backgroundColor: '#111', color: '#fff' }}>
         <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#666', marginBottom: '12px' }}>ABOUT FIXATA</div>
@@ -324,7 +255,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
+      {/* FAQ */}
       <section style={{ padding: '100px 6%', maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '12px' }}>FAQ</div>
@@ -344,29 +275,24 @@ export default function Home() {
         ))}
       </section>
 
-      {/* ── CONTACT ── */}
+      {/* CONTACT */}
       <section id="contact" style={{ padding: '80px 6%', backgroundColor: '#fafaf9', borderTop: '1px solid #f0f0f0', textAlign: 'center' }}>
         <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', color: '#888', marginBottom: '12px' }}>CONTACT</div>
         <h2 style={{ fontSize: '32px', fontWeight: '900', letterSpacing: '-1px', marginBottom: '12px' }}>Need Help?</h2>
         <p style={{ color: '#666', marginBottom: '32px', fontSize: '15px' }}>Our support team is ready to assist you with any questions about your scan or report.</p>
-        <a
-          href="mailto:support@fixata.shop"
-          style={{ display: 'inline-block', backgroundColor: '#111', color: '#fff', padding: '14px 32px', borderRadius: '6px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}
-        >
+        <a href="mailto:support@fixata.shop" style={{ display: 'inline-block', backgroundColor: '#111', color: '#fff', padding: '14px 32px', borderRadius: '6px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
           Email Support →
         </a>
         <p style={{ marginTop: '16px', fontSize: '13px', color: '#aaa' }}>support@fixata.shop · We respond within 24 hours</p>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* FOOTER */}
       <footer style={{ backgroundColor: '#111', color: '#666', padding: '48px 6%' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
             <div>
               <div style={{ fontWeight: '900', fontSize: '20px', color: '#fff', marginBottom: '16px' }}>FIXATA.</div>
-              <p style={{ fontSize: '13px', lineHeight: 1.7, maxWidth: '280px' }}>
-                Professional web vulnerability scanning service. Identify security weaknesses before they become costly breaches. Powered by AWS infrastructure.
-              </p>
+              <p style={{ fontSize: '13px', lineHeight: 1.7, maxWidth: '280px' }}>Professional web vulnerability scanning service. Identify security weaknesses before they become costly breaches. Powered by AWS infrastructure.</p>
             </div>
             <div>
               <div style={{ fontWeight: '700', fontSize: '12px', letterSpacing: '1px', color: '#aaa', marginBottom: '16px' }}>SERVICES</div>
