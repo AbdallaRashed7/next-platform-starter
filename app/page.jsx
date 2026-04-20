@@ -4,8 +4,8 @@ import { useState } from 'react';
 export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ip: string; domain: string} | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [result, setResult] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const [email, setEmail] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
