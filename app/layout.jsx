@@ -10,7 +10,8 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <head>
                 <link rel="icon" href="/favicon.svg" sizes="any" />
-                {/* كود تتبع الزيارات - Analytics */}
+                
+                {/* Google Analytics Tracking Code */}
                 <script 
                     async 
                     src="https://www.googletagmanager.com/gtag/js?id=G-83KVGCWSJT">
@@ -20,14 +21,19 @@ export default function RootLayout({ children }) {
                         window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}
                         gtag('js', new Date());
-                        gtag('config', 'G-XXXXXXXXXX');
+                        gtag('config', 'G-83KVGCWSJT');
                     `
                 }} />
+
+                {/* PayPal SDK Integration with your Client ID */}
+                {/* ## This script enables the Smart Payment Buttons in the frontend ## */}
+                <script 
+                    src="https://www.paypal.com/sdk/js?client-id=AaC6kFQxbUyBeqHrVp_UbOmlgWnZqxv-8LqqC8YDNGbv7iVhlt9myZXgNIKPUC5p3Ez-np99wRxo4j0c&currency=USD">
+                </script>
             </head>
-            {/* حذفنا الـ bg-blue-900 والـ text-white ووضعنا خلفية بيضاء */}
+            
             <body className="antialiased" style={{ backgroundColor: '#ffffff', color: '#000000', margin: 0 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                    {/* سنضع المحتوى مباشرة دون الحاجة لمكونات قديمة تسبب مشاكل */}
                     <div style={{ flexGrow: 1 }}>
                         {children}
                     </div>
