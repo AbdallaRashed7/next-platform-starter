@@ -7,17 +7,14 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [email, setEmail] = useState('');
 
- const handleScan = async () => {
-  // Validation
+const handleScan = async () => {
   const urlPattern = /^https?:\/\/([a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(\/.*)?$/i;
+  const blocked = ['localhost', '127.0.0.1', '0.0.0.0', '192.168.', '10.', '172.16.', '169.254.'];
   
   if (!url) return alert('Please enter a URL');
   if (!urlPattern.test(url)) {
     return alert('Please enter a valid public website URL (e.g., https://example.com)');
   }
-  
-  // Block localhost/private IPs
-  const blocked = ['localhost', '127.0.0.1', '0.0.0.0', '192.168.', '10.', '172.16.', '169.254.'];
   if (blocked.some(b => url.toLowerCase().includes(b))) {
     return alert('Private/internal URLs are not allowed.');
   }
